@@ -1,0 +1,8 @@
+{
+  "name": "GAT Digital Notice Board",
+  "description": "Digital Student Notice Board and Campus Announcements Portal for Global Academy of Technology, Rajarajeshwari Nagar, Bengaluru.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

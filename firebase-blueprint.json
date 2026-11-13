@@ -1,0 +1,620 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized system administrator for GAT Digital Notice Board.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the administrator."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200,
+          "description": "Verified administrator email."
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Full name of the administrator."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when admin access was granted."
+        }
+      },
+      "required": ["uid", "email", "fullName", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Core authenticated user record storing role and notification preferences.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "User full name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200,
+          "description": "Verified user email."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["student", "faculty", "admin"],
+          "description": "Assigned role."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "pending", "suspended"],
+          "description": "Account status."
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Department identifier."
+        },
+        "usnOrEmployeeId": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "University Seat Number or Faculty Employee ID."
+        },
+        "emailNotifications": {
+          "type": "boolean",
+          "description": "Whether the user opted in to email notifications."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "email", "role", "status", "emailNotifications", "createdAt", "updatedAt"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student academic profile linked to a GAT department.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "usn": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "semester": {
+          "type": "integer"
+        },
+        "section": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "emailNotifications": {
+          "type": "boolean"
+        },
+        "lastActiveAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "fullName", "usn", "departmentId", "semester", "emailNotifications", "createdAt", "updatedAt"]
+    },
+    "Faculty": {
+      "title": "Faculty",
+      "description": "Faculty profile and administrator-controlled publishing permissions.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "employeeId": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "designation": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "canPublish": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "fullName", "employeeId", "designation", "departmentId", "approved", "canPublish", "createdAt", "updatedAt"]
+    },
+    "Department": {
+      "title": "Department",
+      "description": "Academic department at Global Academy of Technology.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 140
+        },
+        "shortName": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "programLevel": {
+          "type": "string",
+          "enum": ["UG", "PG"]
+        },
+        "hodName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "displayOrder": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["code", "name", "shortName", "active", "displayOrder", "createdAt", "updatedAt"]
+    },
+    "Notice": {
+      "title": "Notice",
+      "description": "University notice, circular, exam update, or department announcement.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 220
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 12000
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "General Announcements",
+            "Examination Notifications",
+            "Internal Assessment",
+            "Results",
+            "Academic Calendar",
+            "Holidays",
+            "Department Updates",
+            "Placement Notifications",
+            "Workshops and Seminars",
+            "Technical Events",
+            "Cultural Events",
+            "Sports Activities",
+            "Internship Opportunities",
+            "Important Circulars"
+          ]
+        },
+        "departmentIds": {
+          "type": "array"
+        },
+        "targetAllDepartments": {
+          "type": "boolean"
+        },
+        "targetYear": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "targetSemester": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["normal", "important", "urgent"]
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "scheduled", "published", "archived"]
+        },
+        "publishAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authorId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "authorRole": {
+          "type": "string",
+          "enum": ["admin", "faculty"]
+        },
+        "attachments": {
+          "type": "array"
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "title",
+        "summary",
+        "content",
+        "category",
+        "departmentIds",
+        "targetAllDepartments",
+        "priority",
+        "pinned",
+        "status",
+        "publishAt",
+        "authorId",
+        "authorName",
+        "authorRole",
+        "attachments",
+        "isSample",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Campus technical, cultural, seminar, or sports event.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 5000
+        },
+        "posterUrl": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "eventDate": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "eventTime": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "venue": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "departmentName": {
+          "type": "string",
+          "maxLength": 140
+        },
+        "registrationLink": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "registrationDeadline": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "status": {
+          "type": "string",
+          "enum": ["upcoming", "completed", "cancelled"]
+        },
+        "authorId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "eventDate",
+        "eventTime",
+        "venue",
+        "departmentId",
+        "departmentName",
+        "status",
+        "authorId",
+        "authorName",
+        "isSample",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Announcement alert for students and faculty.",
+      "type": "object",
+      "properties": {
+        "recipientId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "noticeId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 220
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["normal", "important", "urgent"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["recipientId", "title", "message", "priority", "createdAt"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Student-bookmarked notice reference.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "noticeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "noticeId", "createdAt"]
+    },
+    "NoticeRead": {
+      "title": "NoticeRead",
+      "description": "Per-user notice read receipt.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "noticeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "readAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "noticeId", "readAt"]
+    },
+    "NotificationRead": {
+      "title": "NotificationRead",
+      "description": "Per-user notification read receipt.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "notificationId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "readAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "notificationId", "readAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "User interaction log for administrative oversight.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "userRole": {
+          "type": "string",
+          "enum": ["student", "faculty", "admin"]
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "targetTitle": {
+          "type": "string",
+          "maxLength": 220
+        },
+        "departmentId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "userName", "userRole", "action", "targetTitle", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Registry of authorized portal administrators."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User accounts and role mappings with strict PII isolation."
+    },
+    "/students/{studentId}": {
+      "schema": { "$ref": "#/entities/Student" },
+      "description": "Student academic records keyed by Auth UID."
+    },
+    "/faculty/{facultyId}": {
+      "schema": { "$ref": "#/entities/Faculty" },
+      "description": "Faculty profiles and admin-controlled publishing permissions."
+    },
+    "/departments/{departmentId}": {
+      "schema": { "$ref": "#/entities/Department" },
+      "description": "Configurable list of GAT academic departments."
+    },
+    "/notices/{noticeId}": {
+      "schema": { "$ref": "#/entities/Notice" },
+      "description": "Published, scheduled, draft, and archived notices."
+    },
+    "/events/{eventId}": {
+      "schema": { "$ref": "#/entities/Event" },
+      "description": "Campus events and registration details."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "In-app notification announcements."
+    },
+    "/bookmarks/{bookmarkId}": {
+      "schema": { "$ref": "#/entities/Bookmark" },
+      "description": "Student-saved notice bookmarks."
+    },
+    "/users/{userId}/noticeReads/{noticeId}": {
+      "schema": { "$ref": "#/entities/NoticeRead" },
+      "description": "Read status per student per notice."
+    },
+    "/users/{userId}/notificationReads/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationRead" },
+      "description": "Read status per user per notification."
+    },
+    "/activityLogs/{logId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Student and faculty portal activity entries for admin review."
+    }
+  }
+}
